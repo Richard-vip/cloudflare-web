@@ -13,7 +13,7 @@ const App = () => {
 
 
   const getList = () => {
-    axios.get('http://127.0.0.1:8787/list').then(res=>res.data).then(res=>{
+    axios.get('https://cloudflare-service.richard-v.workers.dev/list').then(res=>res.data).then(res=>{
       if (res?.data?.keys?.length) {
         setKeys(res.data.keys)
       }
@@ -35,7 +35,7 @@ const App = () => {
 
 
   const addField = () => {
-    axios.post('http://127.0.0.1:8787/create',{
+    axios.post('https://cloudflare-service.richard-v.workers.dev/create',{
       key,
       value
     }).then(res => {
