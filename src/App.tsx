@@ -1,24 +1,79 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 
-function App() {
+
+const App = () => {
+
+  const [keys, setKeys] = useState<string[]>([]);
+  const [values, setValues] = useState<string[]>([]);
+
+  const [key, setKey] = useState('');
+  const [value, setValue] = useState('');
+
+
+  const getList = () => {
+    fetch('http://127.0.0.1:8787/list').then(res => res.json()).then(res => {
+      if (res?.data?.keys?.length) {
+        setKeys(res.data.keys)
+      }
+      if (res?.data?.data?.length) {
+        setValues(res.data.data)
+      }
+    })
+  }
+
+  const handleKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+    setKey(value)
+  }
+
+  const handleValChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+    setValue(value)
+  }
+
+
+  const addField = () => {
+    fetch('http://127.0.0.1:8787/create',{
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        key,
+        value
+      })
+    }).then(res => res.json()).then(res => {
+      console.log(res)
+      if (res.status) {
+        getList();
+      }
+    })
+  }
+
+  useEffect(() => {
+    getList();
+  }, [])
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      hello word <br />
+      <table>
+        <tbody>
+          {keys.map((key, idx) => <tr>
+            <td>{key}</td>
+            <td>{values[idx]}</td>
+          </tr>)}
+        </tbody>
+      </table>
+
+      <input type="text" name='key' onChange={handleKeyChange} />
+      <input type="text" name='values' onChange={handleValChange} />
+
+      <button onClick={() => addField()}> 添加</button>
     </div>
   );
 }
