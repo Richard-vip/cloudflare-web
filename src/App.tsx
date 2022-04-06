@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios  from 'axios';
 import './App.css';
 
 
@@ -12,7 +13,7 @@ const App = () => {
 
 
   const getList = () => {
-    fetch('http://127.0.0.1:8787/list').then(res => res.json()).then(res => {
+    axios.get('http://127.0.0.1:8787/list').then(res=>res.data).then(res=>{
       if (res?.data?.keys?.length) {
         setKeys(res.data.keys)
       }
@@ -34,17 +35,10 @@ const App = () => {
 
 
   const addField = () => {
-    fetch('http://127.0.0.1:8787/create',{
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        key,
-        value
-      })
-    }).then(res => res.json()).then(res => {
+    axios.post('http://127.0.0.1:8787/create',{
+      key,
+      value
+    }).then(res => {
       console.log(res)
       if (res.status) {
         getList();
