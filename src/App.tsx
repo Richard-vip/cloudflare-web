@@ -29,8 +29,15 @@ const App = () => {
     <div className="App">
       hello word <br />
       {name}
-
       <button onClick={getName}>获取name</button>
+      <div>
+        总结：http强缓？本地缓存？workbox 项目中怎么利用 核心区别是什么。
+
+        答： 
+
+
+
+      </div>
     </div>
   );
 }
